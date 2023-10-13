@@ -151,13 +151,17 @@ class ImagePickerControllerDelegate extends NSObject implements QBImagePickerCon
 								})
 						);
 					} else {
-						fileMap[item.originalFilename].filesize = fileManager.attributesOfItemAtPathError(fileMap[item.filename].path).fileSize();
-						if (item.type == 'video') {
-							promises.push(
-								ImageSource.fromAsset(item.asset).then((source) => {
-									fileMap[item.originalFilename].thumbnail = source;
-								})
-							);
+						try {
+							fileMap[item.originalFilename].filesize = fileManager.attributesOfItemAtPathError(fileMap[item.filename].path).fileSize();
+							if (item.type == 'video') {
+								promises.push(
+									ImageSource.fromAsset(item.asset).then((source) => {
+										fileMap[item.originalFilename].thumbnail = source;
+									})
+								);
+							}
+						} catch (error) {
+							console.error('Imagepicker error: ', error)
 						}
 					}
 					count++;
